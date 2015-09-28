@@ -69,6 +69,6 @@ WIDA_NV_Data_LONG <- as.data.table(WIDA_NV_Data_LONG)
 
 ### Set key
 
-setkey(WIDA_NV_Data_LONG, VALID_CASE, CONTENT_AREA, YEAR, ID)
+setkeyv(WIDA_NV_Data_LONG,c("VALID_CASE","CONTENT_AREA","YEAR","ID"))
 summary(duplicated(WIDA_NV_Data_LONG))
 ###############################################################################################################
