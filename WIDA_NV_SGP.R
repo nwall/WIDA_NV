@@ -1,21 +1,5 @@
-############################################################################
-###
-### Script for calculating SGPs for 2015 for WIDA/ACCESS/NV
-###
-############################################################################
-
-### Load SGP package
-
-require(SGP)
-
-
-### Load Data
-
-load("Data/WIDA_NV_Data_LONG.Rdata")
-
-
+###############################################################################################################
 ### Run analyses
-
 WIDA_NV_SGP <- abcSGP(
 		WIDA_NV_Data_LONG,
 		steps=c("prepareSGP", "analyzeSGP", "combineSGP", "outputSGP", "visualizeSGP"),
@@ -31,5 +15,5 @@ WIDA_NV_SGP <- abcSGP(
 
 
 ### Save results
-
-save(WIDA_NV_SGP, file="Data/WIDA_NV_SGP.Rdata")
+save(WIDA_NV_SGP, file="C:/NLDS/WIDA_SGP/WIDA_NV_SGP.Rdata")
+###############################################################################################################
