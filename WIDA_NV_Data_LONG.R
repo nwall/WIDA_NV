@@ -12,12 +12,14 @@ require(plyr)
 require(snow)
 ###############################################################################################################
 
+options(error=recover)
 
 
 ###############################################################################################################
 ###
 ###Read in Long Data
-WIDA_NV_Data_LONG <- as.data.table(read.delim("//EMETRIC-NAS/NevadaLDS/Growth/WIDA/2015/WIDA_GrowthInput_File_2015/WIDA_GrowthInput_File_2015.txt", sep="|", colClasses=rep("character",8)))
+WIDA_NV_Data_LONG <- as.data.table(read.delim("//EMETRIC-NAS/NevadaLDS/Growth/WIDA/2015/WIDA_GrowthInput_File_2015_09282015/WIDA_GrowthInput_File_2015_09282015.txt", sep="|", colClasses=rep("character",8)))
+table(WIDA_NV_Data_LONG$SCALE_SCORE)
 ###############################################################################################################
 
 
@@ -43,16 +45,25 @@ WIDA_NV_Data_LONG[,ACHIEVEMENT_LEVEL:=as.character(ACHIEVEMENT_LEVEL)]
 ###Verify missing data removed
 AchSclScrCheck <- table(WIDA_NV_Data_LONG$ACHIEVEMENT_LEVEL,WIDA_NV_Data_LONG$SCALE_SCORE)
 GradeCheck <- table(WIDA_NV_Data_LONG$GRADE)
+YearCheck <- table(WIDA_NV_Data_LONG$YEAR)
 AchSclScrCheck # print table
 GradeCheck # print table
-
+YearCheck # print table
 
 names(WIDA_NV_Data_LONG)[2:3] <- c("STATE_UNIQUE_ID", "LOCAL_UNIQUE_ID")
 WIDA_NV_Data_LONG$ID <- as.factor(WIDA_NV_Data_LONG$ID)
 levels(WIDA_NV_Data_LONG$LAST_NAME) <- sapply(levels(WIDA_NV_Data_LONG$LAST_NAME), capwords)
 levels(WIDA_NV_Data_LONG$FIRST_NAME) <- sapply(levels(WIDA_NV_Data_LONG$FIRST_NAME), capwords)
 
-WIDA_NV_Data_LONG$ACHIEVEMENT_LEVEL <- ordered(WIDA_NV_Data_LONG$ACHIEVEMENT_LEVEL, levels=c("1.00", "2.00", "3.00", "4.00", "5.00", "6.00"))
+WIDA_NV_Data_LONG[ACHIEVEMENT_LEVEL=="1.00",ACHIEVEMENT_LEVEL:="L1"]
+WIDA_NV_Data_LONG[ACHIEVEMENT_LEVEL=="2.00",ACHIEVEMENT_LEVEL:="L2"]
+WIDA_NV_Data_LONG[ACHIEVEMENT_LEVEL=="3.00",ACHIEVEMENT_LEVEL:="L3"]
+WIDA_NV_Data_LONG[ACHIEVEMENT_LEVEL=="4.00",ACHIEVEMENT_LEVEL:="L4"]
+WIDA_NV_Data_LONG[ACHIEVEMENT_LEVEL=="5.00",ACHIEVEMENT_LEVEL:="L5"]
+WIDA_NV_Data_LONG[ACHIEVEMENT_LEVEL=="6.00",ACHIEVEMENT_LEVEL:="L6"]
+WIDA_NV_Data_LONG$ACHIEVEMENT_LEVEL <- ordered(WIDA_NV_Data_LONG$ACHIEVEMENT_LEVEL, levels=c("L1", "L2", "L3", "L4", "L5", "L6"))
+
+###WIDA_NV_Data_LONG$ACHIEVEMENT_LEVEL <- ordered(WIDA_NV_Data_LONG$ACHIEVEMENT_LEVEL, levels=c("1.00", "2.00", "3.00", "4.00", "5.00", "6.00"))
 ###WIDA_NV_Data_LONG$EMH_LEVEL <- NULL
 
 WIDA_NV_Data_LONG$SCHOOL_ENROLLMENT_STATUS <- as.factor(WIDA_NV_Data_LONG$SCHOOL_ENROLLMENT_STATUS)
@@ -71,4 +82,5 @@ WIDA_NV_Data_LONG <- as.data.table(WIDA_NV_Data_LONG)
 
 setkeyv(WIDA_NV_Data_LONG,c("VALID_CASE","CONTENT_AREA","YEAR","ID"))
 summary(duplicated(WIDA_NV_Data_LONG))
+setkeyv(WIDA_NV_Data_LONG,c("VALID_CASE","CONTENT_AREA","YEAR","ID"))
 ###############################################################################################################
