@@ -17,3 +17,7 @@ WIDA_NV_SGP <- abcSGP(
 ### Save results
 save(WIDA_NV_SGP, file="C:/NLDS/WIDA_SGP/WIDA_NV_SGP.Rdata")
 ###############################################################################################################
+visualizeSGP(
+		WIDA_NV_SGP,plot.types=c("studentGrowthPlot", "growthAchievementPlot"),
+		sgPlot.cleanup=FALSE,
+		parallel.config=list(BACKEND="PARALLEL", WORKERS=list(PERCENTILES=4, PROJECTIONS=4, LAGGED_PROJECTIONS=4, SGP_SCALE_SCORE_TARGETS=4, GA_PLOTS=1, SG_PLOTS=8)))
